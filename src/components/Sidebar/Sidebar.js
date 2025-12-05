@@ -33,6 +33,43 @@ const Sidebar = ({ activeNav, onNavClick }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // sync body classes so the overall layout (grid) can adapt to sidebar state
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const body = document.body;
+    // only apply collapsed class on non-mobile
+    if (!isMobile && collapsed) {
+      body.classList.add('sidebar-collapsed');
+    } else {
+      body.classList.remove('sidebar-collapsed');
+    }
+
+    return () => {
+      body.classList.remove('sidebar-collapsed');
+      body.classList.remove('sidebar-hovered');
+    };
+  }, [collapsed, isMobile]);
+
+  const handleMouseEnter = () => {
+    if (isMobile) return;
+    document.body.classList.add('sidebar-hovered');
+  };
+
+  const handleMouseLeave = () => {
+    if (isMobile) return;
+    document.body.classList.remove('sidebar-hovered');
+    // notify NavItem children to close their dropdowns
+    try {
+      const evt = new CustomEvent('sidebar-mouseleave');
+      document.dispatchEvent(evt);
+    } catch (e) {
+      // fallback for older browsers
+      const evt = document.createEvent('Event');
+      evt.initEvent('sidebar-mouseleave', true, true);
+      document.dispatchEvent(evt);
+    }
+  };
+
   const menuSections = [
     {
       heading: 'Main',
@@ -146,7 +183,11 @@ const Sidebar = ({ activeNav, onNavClick }) => {
         <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />
       )}
 
-      <div className={`sidebar ${collapsed ? 'collapsed' : ''} ${isMobile && mobileOpen ? 'open' : ''}`}>
+      <div
+        className={`sidebar ${collapsed ? 'collapsed' : ''} ${isMobile && mobileOpen ? 'open' : ''}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
       <LogoWithToggle />
       <div className="nav-menu">
         {menuSections.map((section, sectionIndex) => (

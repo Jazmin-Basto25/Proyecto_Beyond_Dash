@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import Notification from './Notification';
+import './Header.css';
 
 const Header = ({ 
   onSearch, 

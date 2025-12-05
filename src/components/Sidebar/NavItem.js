@@ -1,7 +1,7 @@
 // NavItem.js
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
   faHome, faTachometerAlt, faChartLine, faChartPie, faHistory,
   faPhoneAlt, faCog, faRoute, faClock, faMicrophone, faListOl,
   faMusic, faExchangeAlt, faBan, faPlug, faFileAlt, faHeadset,
@@ -12,7 +12,7 @@ import {
   faPalette, faBroadcastTower, faArrowUp, faUserCog, faShieldAlt,
   faFingerprint, faUserLock, faClipboardCheck, faShieldVirus, faLock,
   faCertificate, faUserTie, faUserCheck, faExclamationCircle
-} from '@fortawesome/free-solid-svg-icons';
+  , faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 const iconMap = {
   // Main
@@ -83,7 +83,7 @@ const NavItem = ({ label, icon, type, subItems, isActive, onClick, collapsed, ac
 
   const handleClick = () => {
     if (type === 'dropdown') {
-      setOpen(!open);
+      setOpen((prev) => !prev);
     } else {
       onClick(label);
     }
@@ -94,10 +94,17 @@ const NavItem = ({ label, icon, type, subItems, isActive, onClick, collapsed, ac
     return <FontAwesomeIcon icon={faIcon} />;
   };
 
+  // close dropdowns when sidebar signals mouseleave
+  React.useEffect(() => {
+    const handler = () => setOpen(false);
+    document.addEventListener('sidebar-mouseleave', handler);
+    return () => document.removeEventListener('sidebar-mouseleave', handler);
+  }, []);
+
   return (
     <div>
       <div
-        className={`nav-item ${isActive ? 'active' : ''} ${collapsed ? 'collapsed' : ''}`}
+        className={`nav-item ${isActive ? 'active' : ''} ${collapsed ? 'collapsed' : ''} ${open ? 'open' : ''}`}
         onClick={handleClick}
         style={{
           padding: '10px 20px',
@@ -108,10 +115,16 @@ const NavItem = ({ label, icon, type, subItems, isActive, onClick, collapsed, ac
           color: isActive ? '#3b82f6' : '#f1f5f9',
           background: isActive ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
           borderLeft: isActive ? '3px solid #3b82f6' : 'none',
+          transition: 'background 0.25s ease, color 0.25s ease',
         }}
       >
         <span className="nav-icon" style={{ fontSize: '1.1rem' }}>{renderIcon(icon)}</span>
         <span className="nav-label">{label}</span>
+        {type === 'dropdown' && (
+          <span className={`dropdown-caret ${open ? 'open' : ''}`} style={{ marginLeft: 'auto' }}>
+            <FontAwesomeIcon icon={open ? faChevronUp : faChevronDown} />
+          </span>
+        )}
       </div>
 
       {type === 'dropdown' && (
