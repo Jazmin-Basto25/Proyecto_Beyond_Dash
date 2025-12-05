@@ -12,6 +12,8 @@
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 100;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
 .sidebar.collapsed {
@@ -137,4 +139,158 @@
 
 .version {
   color: #64748b; /* slate-500 */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+    z-index: 200;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* keep collapsed visual behavior but make it full hidden when closed */
+  .sidebar.collapsed {
+    width: 260px;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 150;
+  }
+
+  /* adjust logo spacing for mobile */
+  .sidebar .logo {
+    padding: 12px 14px;
+  }
+
+  .nav-menu {
+    padding-left: 0;
+  }
+}
+
+/* mobile floating toggle button */
+@media (max-width: 768px) {
+  .mobile-toggle {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: rgba(30,41,59,0.95);
+    color: #f1f5f9;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 350;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    cursor: pointer;
+  }
+
+  .mobile-toggle:focus {
+    outline: 2px solid rgba(99,102,241,0.6);
+  }
+}
+
+@media (min-width: 769px) {
+  /* make sidebar visually compressed by default */
+  .sidebar {
+    width: 72px;
+    transition: width 0.22s ease, box-shadow 0.22s ease;
+    overflow: visible;
+  }
+
+  /* preserve explicit collapsed class behavior */
+  .sidebar.collapsed {
+    width: 72px;
+  }
+
+  /* hover expands the sidebar */
+  .sidebar:hover {
+    width: 260px;
+  }
+
+  .sidebar.collapsed .menu-heading span,
+  .sidebar.collapsed .user-info-sidebar,
+  .sidebar.collapsed .sidebar-footer .version,
+  .sidebar.collapsed .user-status span {
+    display: none;
+  }
+
+  .sidebar.collapsed:hover .menu-heading span,
+  .sidebar.collapsed:hover .user-info-sidebar,
+  .sidebar.collapsed:hover .sidebar-footer .version,
+  .sidebar.collapsed:hover .user-status span {
+    display: block;
+  }
+
+  /* nav item labels: hidden when collapsed, visible on hover */
+  .nav-item .nav-label {
+    display: inline-block;
+  }
+
+  .nav-item.collapsed .nav-label {
+    display: none;
+  }
+
+  .sidebar.collapsed:hover .nav-item.collapsed .nav-label {
+    display: inline-block;
+  }
+
+  /* submenu hidden by default; visible only when opened by click (.open) or when sidebar is expanded */
+  .nav-submenu {
+    display: none;
+  }
+
+  .nav-submenu.open {
+    display: block;
+  }
+
+  /* when sidebar is not collapsed (expanded), show submenus normally */
+  .sidebar:not(.collapsed) .nav-submenu {
+    display: block;
+  }
+
+  /* subitem labels: hidden when sidebar is collapsed; visible when submenu is open or sidebar expanded */
+  .nav-subitem .nav-subitem-label {
+    display: inline-block;
+  }
+
+  .sidebar.collapsed .nav-subitem .nav-subitem-label {
+    display: none;
+  }
+
+  .nav-submenu.open .nav-subitem .nav-subitem-label {
+    display: inline-block;
+  }
+
+  /* ensure footer layout returns to row when hovered */
+  .sidebar.collapsed:hover .sidebar-footer {
+    flex-direction: row;
+    gap: 0;
+  }
+
+  .sidebar .logo {
+    padding: 12px 14px;
+  }
+
+  /* improve layering so expanded sidebar overlays content slightly */
+  .sidebar:hover {
+    box-shadow: 2px 0 20px rgba(0,0,0,0.25);
+    z-index: 120;
+  }
 }

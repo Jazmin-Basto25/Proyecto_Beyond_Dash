@@ -109,32 +109,33 @@ const NavItem = ({ label, icon, type, subItems, isActive, onClick, collapsed, ac
           background: isActive ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
           borderLeft: isActive ? '3px solid #3b82f6' : 'none',
         }}
-        onMouseEnter={(collapsed && type === 'dropdown') ? () => {} : undefined}
       >
-        <span style={{ fontSize: '1.1rem' }}>{renderIcon(icon)}</span>
-        {!collapsed && <span>{label}</span>}
+        <span className="nav-icon" style={{ fontSize: '1.1rem' }}>{renderIcon(icon)}</span>
+        <span className="nav-label">{label}</span>
       </div>
 
-      {!collapsed && open && type === 'dropdown' && (
-        <div style={{ paddingLeft: '32px', background: 'rgba(0,0,0,0.1)' }}>
-          {subItems.map((sub, i) => (
-            <div
-              key={i}
-              className={`nav-subitem ${activeNav === sub.label ? 'active' : ''}`}
-              onClick={() => onClick(sub.label)}
-              style={{
-                padding: '8px 0',
-                cursor: 'pointer',
-                color: activeNav === sub.label ? '#3b82f6' : '#cbd5e1',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
-            >
-              <span style={{ fontSize: '0.9rem' }}>{renderIcon(sub.icon)}</span>
-              <span>{sub.label}</span>
-            </div>
-          ))}
+      {type === 'dropdown' && (
+        <div className={`nav-submenu ${open ? 'open' : ''}`}>
+          <div style={{ paddingLeft: '32px', background: 'rgba(0,0,0,0.05)' }}>
+            {subItems && subItems.map((sub, i) => (
+              <div
+                key={i}
+                className={`nav-subitem ${activeNav === sub.label ? 'active' : ''}`}
+                onClick={() => onClick(sub.label)}
+                style={{
+                  padding: '8px 0',
+                  cursor: 'pointer',
+                  color: activeNav === sub.label ? '#3b82f6' : '#cbd5e1',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <span style={{ fontSize: '0.9rem' }}>{renderIcon(sub.icon)}</span>
+                <span className="nav-subitem-label">{sub.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

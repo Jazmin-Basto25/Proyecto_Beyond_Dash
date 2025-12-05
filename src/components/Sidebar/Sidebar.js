@@ -1,5 +1,5 @@
 // Sidebar.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import NavItem from './NavItem';
@@ -7,12 +7,31 @@ import Logo from './Logo';
 import './Sidebar.css';
 
 const Sidebar = ({ activeNav, onNavClick }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  // start collapsed on desktop by default; hover will expand via CSS
+  const [collapsed, setCollapsed] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   // Toggle collapsed state
   const toggleSidebar = () => {
-    setCollapsed(!collapsed);
+    if (isMobile) {
+      setMobileOpen((prev) => !prev);
+    } else {
+      setCollapsed((prev) => !prev);
+    }
   };
+
+  // detect mobile viewport
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (!mobile) setMobileOpen(false);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const menuSections = [
     {
@@ -107,31 +126,27 @@ const Sidebar = ({ activeNav, onNavClick }) => {
   const LogoWithToggle = () => (
     <div className="logo">
       <Logo />
-      <button 
-        onClick={toggleSidebar}
-        className="toggle-btn"
-        style={{
-          background: 'none',
-          border: 'none',
-          color: '#f1f5f9',
-          cursor: 'pointer',
-          padding: '4px',
-          borderRadius: '4px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '32px',
-          height: '32px',
-        }}
-        aria-label={collapsed ? "Expandir menú" : "Contraer menú"}
-      >
-        <FontAwesomeIcon icon={faBars} />
-      </button>
     </div>
   );
 
   return (
-    <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+    <>
+      {/* mobile floating toggle button (visible even when sidebar is closed) */}
+      {isMobile && (
+        <button
+          className="mobile-toggle"
+          onClick={toggleSidebar}
+          aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+      )}
+      {/* overlay for mobile when menu is open */}
+      {isMobile && mobileOpen && (
+        <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />
+      )}
+
+      <div className={`sidebar ${collapsed ? 'collapsed' : ''} ${isMobile && mobileOpen ? 'open' : ''}`}>
       <LogoWithToggle />
       <div className="nav-menu">
         {menuSections.map((section, sectionIndex) => (
@@ -163,9 +178,10 @@ const Sidebar = ({ activeNav, onNavClick }) => {
           <div className="status-indicator online"></div>
           {!collapsed && <span>Sistema Online</span>}
         </div>
-        {!collapsed && <div className="version">v2.5.1</div>}
+        {!collapsed && <div className="version">v1.0</div>}
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
