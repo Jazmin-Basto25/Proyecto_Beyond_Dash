@@ -45,7 +45,6 @@ const Icon = ({ name, size = 20, color, className = '', onClick }) => {
     'file-export': FaIcons.FaFileExport,
     'search': FaIcons.FaSearch,
     'exclamation-triangle': FaIcons.FaExclamationTriangle,
-    'chart-pie': FaIcons.FaChartPie,
     'code': FaIcons.FaCode,
     'calendar-alt': FaIcons.FaCalendarAlt,
     
@@ -100,7 +99,6 @@ const Icon = ({ name, size = 20, color, className = '', onClick }) => {
     'eye': FaIcons.FaEye,
     'download': FaIcons.FaDownload,
     'plus': FaIcons.FaPlus,
-    'envelope': FaIcons.FaEnvelope,
     
     // Flechas para dropdown
     'chevron-right': FaIcons.FaChevronRight,
