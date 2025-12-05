@@ -52,7 +52,7 @@ const Sidebar = ({ activeNav, onNavClick }) => {
           ],
         },
         {
-          label: 'Configuración de llamadas',
+          label: 'Ajustes llamadas',
           icon: 'cog',
           type: 'dropdown',
           subItems: [

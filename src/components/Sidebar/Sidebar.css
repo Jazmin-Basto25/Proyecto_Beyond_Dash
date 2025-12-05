@@ -22,14 +22,15 @@
 
 /* Logo */
 .sidebar .logo {
-  padding: 16px 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.sidebar.collapsed .logo-text {
-  display: none;
+.sidebar .logo img {
+  max-width: 60px;
+  height: auto;
+  border: none;
 }
 
 /* User Profile */
@@ -171,7 +172,6 @@
     z-index: 150;
   }
 
-  /* adjust logo spacing for mobile */
   .sidebar .logo {
     padding: 12px 14px;
   }

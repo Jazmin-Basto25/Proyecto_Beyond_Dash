@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../../assets/img/Logo_Beyond_Header.png';
+import logo from '../../assets/img/Logo_Beyond_Header_w.png';
 
 const Logo = () => {
   return (
@@ -7,7 +7,6 @@ const Logo = () => {
       <img
         src={logo}
         alt="Beyond Dash"
-        style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
       />
     </div>
   );
